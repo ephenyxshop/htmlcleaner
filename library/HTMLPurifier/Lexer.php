@@ -261,7 +261,7 @@ class HTMLPurifier_Lexer
 		return preg_replace_callback(
             '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
-            $string
+            (string)$string
         );
     }
 
