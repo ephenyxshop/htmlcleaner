@@ -243,11 +243,14 @@ class HTMLPurifier_Lexer
      */
     protected static function escapeCDATA($string)
     {
-        return preg_replace_callback(
-            '/<!\[CDATA\[(.+?)\]\]>/s',
-            array('HTMLPurifier_Lexer', 'CDATACallback'),
-            $string
-        );
+        if(!is_null($string)) {
+			return preg_replace_callback(
+            	'/<!\[CDATA\[(.+?)\]\]>/s',
+            	array('HTMLPurifier_Lexer', 'CDATACallback'),
+            	$string
+        	);
+		}
+		return $string;
     }
 
     /**
@@ -257,12 +260,14 @@ class HTMLPurifier_Lexer
      */
     protected static function escapeCommentedCDATA($string)
     {
-        if(!is_null($string))
-		return preg_replace_callback(
+        if(!is_null($string)) {
+			return preg_replace_callback(
             '#<!--//--><!\[CDATA\[//><!--(.+?)//--><!\]\]>#s',
             array('HTMLPurifier_Lexer', 'CDATACallback'),
-            (string)$string
-        );
+            $string
+        	);
+		}
+		return $string;
     }
 
     /**
@@ -272,11 +277,14 @@ class HTMLPurifier_Lexer
      */
     protected static function removeIEConditional($string)
     {
-        return preg_replace(
-            '#<!--\[if [^>]+\]>.*?<!\[endif\]-->#si', // probably should generalize for all strings
-            '',
-            $string
-        );
+        if(!is_null($string)) {
+			return preg_replace(
+				'#<!--\[if [^>]+\]>.*?<!\[endif\]-->#si', // probably should generalize for all strings
+				'',
+				$string
+        	);
+		 }
+		return $string;
     }
 
     /**
@@ -366,7 +374,7 @@ class HTMLPurifier_Lexer
     public function extractBody($html)
     {
         $matches = array();
-        $result = preg_match('|(.*?)<body[^>]*>(.*)</body>|is', $html, $matches);
+        $result = preg_match('|(.*?)<body[^>]*>(.*)</body>|is', (string)$html, $matches);
         if ($result) {
             // Make sure it's not in a comment
             $comment_start = strrpos($matches[1], '<!--');

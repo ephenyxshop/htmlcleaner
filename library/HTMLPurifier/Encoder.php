@@ -136,12 +136,16 @@ class HTMLPurifier_Encoder
         // UTF-8 validity is checked since PHP 4.3.5
         // This is an optimization: if the string is already valid UTF-8, no
         // need to do PHP stuff. 99% of the time, this will be the case.
+		if(is_null($str)) {
+			return $str;
+		}
         if (preg_match(
             '/^[\x{9}\x{A}\x{D}\x{20}-\x{7E}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]*$/Du',
             $str
         )) {
             return $str;
         }
+		
 
         $mState = 0; // cached expected number of octets after the current octet
                      // until the beginning of the next UTF8 character sequence
